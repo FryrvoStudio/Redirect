@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <table border="1" cellpadding="8">
+    <thead>
+      <tr><th>Path</th><th>URL</th><th>Status</th></tr>
+    </thead>
+    <tbody id="links"></tbody>
+  </table>
+
+  <script>
+    fetch('/redirect.txt')
+      .then(res => res.text())
+      .then(text => {
+        document.getElementById('links').innerHTML = text
+          .trim()
+          .split('\n')
+          .filter(line => line.trim())
+          .map(line => {
+            const [path, url, status] = line.trim().split(/\s+/);
+            const fullPathUrl = window.location.origin + path;
+            return `<tr><td><a href="${fullPathUrl}">${path}</a></td><td><a href="${url}">${url}</a></td><td>${status}</td></tr>`;
+          }).join('');
+      });
+  </script>
+</body>
+</html>
